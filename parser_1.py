@@ -5,19 +5,12 @@ import numpy as np
 import datetime
 from time import sleep 
 
-login = config.LOGIN
-password = config.PASSWORD
 token = config.TOKEN
 
 lentach_id = '-29534144'
 rbc_id = '-25232578'
 gosduma_id = '-138347372'
 mash_id = '-112510789'
-
-lentach_url = f'https://api.vk.com/method/wall.get?owner_id=-29534144&fields=bdate&access_token={token}&v=5.131'
-rbc_url = f'https://api.vk.com/method/wall.get?owner_id=-25232578&fields=bdate&access_token={token}&v=5.131'
-gosduma_url = f'https://api.vk.com/method/wall.get?owner_id=-138347372&fields=bdate&access_token={token}2&v=5.131'
-mash_url = f'https://api.vk.com/method/wall.get?owner_id=-112510789&fields=bdate&access_token={token}2&v=5.131'
 
 session = vk_api.VkApi(token = token)
 vk = session.get_api()
@@ -28,9 +21,9 @@ def get_posts_ids(group_id, access_token = token, offset = 0):
                                            'count': 100})
   
   posts_ids = [posts_json['items'][i]['id'] for i in range(100)]
-  oldest_post_date = posts_json['items'][0]['date']
+  oldest_post_date = posts_json['items'][-1]['date']
   
-  return posts_ids, oldest_post_date
+  return posts_ids, oldest_post_date #возвращает список id постов и даты последнего поста
 
 def get_comments_info(group_id, post_id, access_token = token, offset = 0):
     comments_json = session.method('wall.getComments', {'owner_id': group_id,
